@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+    <%- include("./partials/head.ejs") %>
+
+<body>
+    <%- include("./partials/nav.ejs") %>
+
+    <div class="details content">
+        <h2><%= blog.title %></h2>
+        <div class="content">
+            <p><%= blog.body %></p>
+        </div>
+        <a class="delete" data-blog="<%= blog.id %>">
+            <img src="/trashcan.svg" alt="delete icon">
+        </a>
+    </div>
+
+
+
+    <%- include("./partials/footer.ejs") %>
+    <script>
+        const deleteBtn = document.querySelector('a.delete')
+        deleteBtn.addEventListener('click',(event)=>{
+            console.log("delete btn clicked")
+            console.log(deleteBtn.dataset.blog)
+            const deleteEndpoint = `/blogs/:id`
+        })
+    </script>
+</body>
+</html>
