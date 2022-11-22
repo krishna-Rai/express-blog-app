@@ -13,7 +13,11 @@
         <a class="delete" data-blog="<%= blog.id %>">
             <img src="/trashcan.svg" alt="delete icon">
         </a>
+        <a class="update" data-blog="<%= blog.id %>">
+            <button>Update blog</button>
+        </a>
     </div>
+    
 
 
 
@@ -22,8 +26,28 @@
         const deleteBtn = document.querySelector('a.delete')
         deleteBtn.addEventListener('click',(event)=>{
             console.log("delete btn clicked")
-            console.log(deleteBtn.dataset.blog)
-            const deleteEndpoint = `/blogs/:id`
+            // console.log(deleteBtn.dataset.blog)
+            const id = deleteBtn.dataset.blog
+            const deleteEndpoint = `/blogs/${id}`
+            console.log(deleteEndpoint)
+            fetch(deleteEndpoint,{
+                method: 'DELETE'
+            }).then(response => response.json())
+            .then(data=> {
+                console.log(data)
+                window.location.href = data.redirect
+            })
+            .catch(err=>{
+                console.log(err)
+            })
+        })
+        
+        const updateBtn = document.querySelector('a.update')
+        updateBtn.addEventListener('click',(event)=>{
+            console.log("update btn clicked")
+            const id = updateBtn.dataset.blog
+            console.log(id)
+            window.location.href = `/blogs/update/${id}`
         })
     </script>
 </body>

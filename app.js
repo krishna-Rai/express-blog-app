@@ -10,6 +10,7 @@ const PORT = 3000
 app.listen(PORT,()=>{
     console.log("The server is running at port:",PORT)
 })
+app.use(express.json())
 app.use(express.static('public'))
 app.use(express.urlencoded({extended:true}))
 app.use(morgan('tiny'))
@@ -51,6 +52,26 @@ app.get('/blogs/create', (req,res)=>{
     res.render('create', {
         title: "Create new Blog"
     })
+})
+app.get('/blogs/update/:id', (req,res)=>{
+    const id = req.params.id
+    fs.readFile('./db/blogs.json', 'utf-8', (err,blogData)=>{
+        if(err){
+            console.log("Error in reading blog data")
+            return
+        }
+        let blogs = JSON.parse(blogData)
+        blogs = blogs.filter((blog)=>blog.id == id)
+        if(blogs.length>0){
+            res.render('update', {
+                title: "Update Blog",
+                blog: blogs[0]
+            })
+        }else{
+            res.render('404',{title:"404"})
+        }
+    })
+    
 })
 app.get('/blogs/:id',(req,res)=>{
     const id = req.params.id
@@ -114,7 +135,39 @@ app.delete('/blogs/:id',(req,res)=>{
             }else{
                 console.log("Successfully update the blogs data")
             }
-            res.redirect('/blogs')
+            // res.redirect('/blogs')
+            res.json({redirect:'/blogs'})
+        })
+    })
+})
+
+app.put('/blogs/:id',(req,res)=>{
+    const id = req.params.id
+    console.log("Inside put")
+    console.log(req.body)
+
+    fs.readFile('./db/blogs.json', 'utf-8', (err,blogData)=>{
+        if(err){
+            console.log("Error in reading blog data")
+            return
+        }
+        let blogs = JSON.parse(blogData)
+        blogs.forEach(blog=>{
+            if(blog.id == id){
+                blog.title = req.body.title
+                blog.snippet = req.body.snippet
+                blog.body = req.body.body
+            }
+        })
+        console.log(blogs)
+        fs.writeFile('./db/blogs.json',JSON.stringify(blogs),(err)=>{
+            if(err){
+                console.log("Error updating the blogs data")
+            }else{
+                console.log("Successfully update the blogs data")
+            }
+            // res.redirect('/blogs')
+            res.json({redirect:`/blogs/${id}`})
         })
     })
 })

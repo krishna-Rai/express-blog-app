@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include("./partials/head.ejs") %>
+
+<body>
+    <%- include("./partials/nav.ejs") %>
+    <div class="create-blog content">
+        <form id="update-blog" data-blog="<%= blog.id %>">
+            <label for="title">Blog Title:</label>
+            <input type="text" id="title" name="title" value="<%= blog.title %>" required>
+            <label for="snippet">Blog Snippet:</label>
+            <input type="text" name="snippet" id="snippet" value="<%= blog.snippet %>" required>
+            <label for="body">Blog body:</label>
+            <textarea id="body" name="body"><%= blog.body %></textarea>
+            <button>Submit</button>
+        </form>
+    </div>
+    <%- include("./partials/footer.ejs") %>
+
+    <script>
+        const form = document.getElementById('update-blog')
+        form.addEventListener('submit',(event)=>{
+            event.preventDefault()
+            console.log('form submitted')
+            // console.log([...(new FormData(event.target)).entries()])
+            const title = document.getElementById('title')
+            const snippet = document.getElementById('snippet')
+            const body = document.getElementById('body')
+            // console.log(title.value,snippet.value,body.value)
+            const payload = {
+                title : title.value,
+                snippet: snippet.value,
+                body: body.value
+            }
+            const id = form.dataset.blog
+            console.log(id)
+            const updateEndpoint = `/blogs/${id}`
+            const requestOptions = {
+                method : 'PUT',
+                headers : {'Content-Type':'application/json'},
+                body : JSON.stringify(payload)
+            }
+            fetch(updateEndpoint,requestOptions)
+            .then(res=>res.json())
+            .then(data=>{
+                console.log(data)
+                window.location.href = data.redirect
+            })
+            .catch(err=>console.log(err))
+        })
+    </script>
+</body>
+</html>
