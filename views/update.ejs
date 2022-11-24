@@ -5,7 +5,7 @@
 <body>
     <%- include("./partials/nav.ejs") %>
     <div class="create-blog content">
-        <form id="update-blog" data-blog="<%= blog.id %>">
+        <form id="update-blog" data-blog="<%= blog._id %>">
             <label for="title">Blog Title:</label>
             <input type="text" id="title" name="title" value="<%= blog.title %>" required>
             <label for="snippet">Blog Snippet:</label>

@@ -10,10 +10,10 @@
         <div class="content">
             <p><%= blog.body %></p>
         </div>
-        <a class="delete" data-blog="<%= blog.id %>">
+        <a class="delete" data-blog="<%= blog._id %>">
             <img src="/trashcan.svg" alt="delete icon">
         </a>
-        <a class="update" data-blog="<%= blog.id %>">
+        <a class="update" data-blog="<%= blog._id %>">
             <button>Update blog</button>
         </a>
     </div>
